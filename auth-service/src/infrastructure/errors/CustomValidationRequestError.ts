@@ -1,10 +1,11 @@
 import { CustomError, ErrorResponse } from "./CustomError";
 
-export class ValidationRequestError extends CustomError {
+export class CustomValidationRequestError extends CustomError {
   statusCode: number = 400;
 
   constructor(public errors: ErrorResponse) {
-    super(400, "Request validation error");
+    super("Request validation error");
+    Object.setPrototypeOf(this, CustomValidationRequestError.prototype);
   }
 
   serializeError(): ErrorResponse {
