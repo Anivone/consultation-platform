@@ -1,13 +1,12 @@
-import * as awilix from "awilix";
-
 import UserModel, { UserMod } from "../data/schemas/UserSchema";
 import { AuthRepository } from "../data/repositories/AuthRepository";
 import { AuthService } from "../infrastructure/services/AuthService";
+import {asClass, asValue, AwilixContainer, createContainer} from "awilix";
 
 declare global {
   namespace Express {
     interface Request {
-      container: awilix.AwilixContainer<MyContainer>;
+      container: AwilixContainer<MyContainer>;
     }
   }
 }
@@ -19,18 +18,18 @@ interface MyContainer {
 }
 
 export default function initContainer() {
-  const container = awilix.createContainer<MyContainer>();
+  const container = createContainer<MyContainer>();
 
   container.register({
-    UserModel: awilix.asValue(UserModel),
+    UserModel: asValue(UserModel),
 
     // Repositories
 
-    authRepository: awilix.asClass(AuthRepository).singleton(),
+    authRepository: asClass(AuthRepository).singleton(),
 
     // Services
 
-    authService: awilix.asClass(AuthService).singleton(),
+    authService: asClass(AuthService).singleton(),
   });
 
   return container;

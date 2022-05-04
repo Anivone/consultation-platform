@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consultations-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consultations
+  template:
+    metadata:
+      labels:
+        app: consultations
+    spec:
+      containers:
+        - name: consultations
+          image: anivone/consultations-service
+          env:
+            - name: MONGO_URI
+              value: "mongodb://consultations-mongo-srv:27017/consultations-service"
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consultations-srv
+spec:
+  selector:
+    app: consultations
+  type: ClusterIP
+  ports:
+    - name: consultations
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
