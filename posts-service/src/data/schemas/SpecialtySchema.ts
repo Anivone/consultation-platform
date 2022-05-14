@@ -1,14 +1,15 @@
-import { setProps } from "@mv-consultation-platform/common";
 import mongoose, { Document, Model } from "mongoose";
 import { SpecialtyProps } from "../../domain/entities/types";
-import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export interface SpecialtyDoc extends Omit<SpecialtyProps, "id">, Document {}
 
 export interface SpecialtyMod extends Model<SpecialtyDoc> {
   build(props: SpecialtyProps): SpecialtyDoc;
 
-  setProps(doc: SpecialtyDoc, props: Partial<SpecialtyProps>): SpecialtyDoc;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<SpecialtyDoc | null>;
 }
 
 const SpecialtySchema = new mongoose.Schema(
@@ -34,13 +35,22 @@ const SpecialtySchema = new mongoose.Schema(
   }
 );
 
-SpecialtySchema.set("versionKey", "version");
-SpecialtySchema.plugin(updateIfCurrentPlugin);
-
-SpecialtySchema.statics.setProps = setProps;
+SpecialtySchema.statics.findByEvent = (event: {
+  id: string;
+  version: number;
+}) => {
+  return SpecialtyModel.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
 
 SpecialtySchema.statics.build = (props: SpecialtyProps) => {
-  return new SpecialtyModel(props);
+  return new SpecialtyModel({
+    _id: props.id,
+    name: props.name,
+    sphereId: props.sphereId,
+  });
 };
 
 const SpecialtyModel = mongoose.model<SpecialtyDoc, SpecialtyMod>(

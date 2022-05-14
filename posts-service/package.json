@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mv-consultation-platform/common": "^1.0.5",
     "@types/axios": "^0.14.0",
     "@types/body-parser": "^1.19.2",
     "@types/cookie-parser": "^1.4.2",
@@ -41,6 +42,7 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.0",
+    "mongoose-update-if-current": "^1.4.0",
     "multer": "^1.4.4",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.9.0",

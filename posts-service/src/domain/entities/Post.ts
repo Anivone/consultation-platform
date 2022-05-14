@@ -4,6 +4,9 @@ import { PostProps, PostStatus } from "./types";
 export class Post implements PostProps {
   id?: string;
 
+  @ValidateIf(() => false)
+  version: number;
+
   @IsNotEmpty({
     message: "Title must be provided",
   })
@@ -44,6 +47,7 @@ export class Post implements PostProps {
   edited?: boolean;
 
   constructor(
+    version: number,
     title: string,
     description: string,
     userId: string,
@@ -56,6 +60,8 @@ export class Post implements PostProps {
     views: number = 0,
     edited: boolean = false
   ) {
+    this.id = id;
+    this.version = version;
     this.title = title;
     this.description = description;
     this.userId = userId;
@@ -66,11 +72,11 @@ export class Post implements PostProps {
     this.specialty = specialty;
     this.status = status;
     this.edited = edited;
-    this.id = id;
   }
 
   static build({
     id,
+    version,
     title,
     description,
     userId,
@@ -83,6 +89,7 @@ export class Post implements PostProps {
     edited,
   }: PostProps) {
     return new Post(
+      version,
       title,
       description,
       userId,

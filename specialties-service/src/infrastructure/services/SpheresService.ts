@@ -1,56 +1,56 @@
-import { SpecialtiesRepository } from "../../data/repositories/SpecialtiesRepository";
-import { Specialty } from "../../domain/entities/Specialty";
-import {SpecialtyProps} from "../../domain/entities/types";
+import { SpheresRepository } from "../../data/repositories/SpheresRepository";
+import { Sphere } from "../../domain/entities/Sphere";
+import {SphereProps} from "../../domain/entities/types";
 import {Service} from "./Service";
 
-interface SpecialtiesServiceProps {
-  specialtiesRepository: SpecialtiesRepository;
+interface SpheresServiceProps {
+  spheresRepository: SpheresRepository;
 }
 
-export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
-  private specialtiesRepository: SpecialtiesRepository;
+export class SpheresService implements Service<Sphere, SphereProps>{
+  private spheresRepository: SpheresRepository;
 
-  constructor({ specialtiesRepository }: SpecialtiesServiceProps) {
-    this.specialtiesRepository = specialtiesRepository;
+  constructor({ spheresRepository }: SpheresServiceProps) {
+    this.spheresRepository = spheresRepository;
   }
 
-  async get(filter?: Partial<SpecialtyProps>): Promise<Specialty[]> {
-    const specialtiesFound = await this.specialtiesRepository.getAll(filter);
+  async get(filter?: Partial<SphereProps>): Promise<Sphere[]> {
+    const spheresFound = await this.spheresRepository.getAll(filter);
 
-    return specialtiesFound;
+    return spheresFound;
   }
 
-  async getById(id: string): Promise<Specialty | null> {
-    const specialtyFound = await this.specialtiesRepository.getById(id);
-    console.log('specialtyFound', specialtyFound);
-    if (!specialtyFound) return null;
+  async getById(id: string): Promise<Sphere | null> {
+    const sphereFound = await this.spheresRepository.getById(id);
+    console.log('sphereFound', sphereFound);
+    if (!sphereFound) return null;
 
-    return specialtyFound;
+    return sphereFound;
   }
 
-  async getOne(specialty: Partial<SpecialtyProps>): Promise<Specialty | null> {
-    const specialtyFound = await this.specialtiesRepository.getOne(specialty);
-    if (!specialtyFound) return null;
+  async getOne(sphere: Partial<SphereProps>): Promise<Sphere | null> {
+    const sphereFound = await this.spheresRepository.getOne(sphere);
+    if (!sphereFound) return null;
 
-    return specialtyFound;
+    return sphereFound;
   }
 
-  async create(specialty: Specialty): Promise<Specialty> {
-    const newPost = Specialty.build(specialty);
-    return await this.specialtiesRepository.create(newPost);
+  async create(sphere: Sphere): Promise<Sphere> {
+    const newPost = Sphere.build(sphere);
+    return await this.spheresRepository.create(newPost);
   }
 
-  async update(id: string, specialty: Partial<Specialty>): Promise<Specialty | null> {
-    const specialtyUpdated = await this.specialtiesRepository.update(id, specialty);
-    if (!specialtyUpdated) return null;
+  async update(id: string, sphere: Partial<Sphere>): Promise<Sphere | null> {
+    const sphereUpdated = await this.spheresRepository.update(id, sphere);
+    if (!sphereUpdated) return null;
 
-    return Specialty.build(specialtyUpdated);
+    return Sphere.build(sphereUpdated);
   }
 
-  async delete(id: string): Promise<Specialty | null> {
-    const specialtyDeleted = await this.specialtiesRepository.delete(id);
-    if (!specialtyDeleted) return null;
+  async delete(id: string): Promise<Sphere | null> {
+    const sphereDeleted = await this.spheresRepository.delete(id);
+    if (!sphereDeleted) return null;
 
-    return specialtyDeleted;
+    return sphereDeleted;
   }
 }

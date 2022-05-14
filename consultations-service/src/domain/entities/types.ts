@@ -1,5 +1,6 @@
 export interface ConsultationProps {
     id?: string;
+    version: number;
     title: string;
     userId: string;
     consultantId: string;

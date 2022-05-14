@@ -2,55 +2,65 @@ import { SpecialtiesRepository } from "../../data/repositories/SpecialtiesReposi
 import { Specialty } from "../../domain/entities/Specialty";
 import {SpecialtyProps} from "../../domain/entities/types";
 import {Service} from "./Service";
+import {SpecialtyCreatedPublisher} from "../../events/SpecialtyCreatedPublisher";
+import {natsWrapper} from "@mv-consultation-platform/common";
 
-interface PostsServiceProps {
-  postsRepository: SpecialtiesRepository;
+interface SpecialtiesServiceProps {
+  specialtiesRepository: SpecialtiesRepository;
 }
 
-export class PostsService implements Service<Specialty, SpecialtyProps>{
-  private postsRepository: SpecialtiesRepository;
+export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
+  private specialtiesRepository: SpecialtiesRepository;
 
-  constructor({ postsRepository }: PostsServiceProps) {
-    this.postsRepository = postsRepository;
+  constructor({ specialtiesRepository }: SpecialtiesServiceProps) {
+    this.specialtiesRepository = specialtiesRepository;
   }
 
   async get(filter?: Partial<SpecialtyProps>): Promise<Specialty[]> {
-    const postsFound = await this.postsRepository.getAll(filter);
+    const specialtiesFound = await this.specialtiesRepository.getAll(filter);
 
-    return postsFound;
+    return specialtiesFound;
   }
 
   async getById(id: string): Promise<Specialty | null> {
-    const postFound = await this.postsRepository.getById(id);
-    console.log('postFound', postFound);
-    if (!postFound) return null;
+    const specialtyFound = await this.specialtiesRepository.getById(id);
+    console.log('specialtyFound', specialtyFound);
+    if (!specialtyFound) return null;
 
-    return postFound;
+    return specialtyFound;
   }
 
-  async getOne(post: Partial<SpecialtyProps>): Promise<Specialty | null> {
-    const postFound = await this.postsRepository.getOne(post);
-    if (!postFound) return null;
+  async getOne(specialty: Partial<SpecialtyProps>): Promise<Specialty | null> {
+    const specialtyFound = await this.specialtiesRepository.getOne(specialty);
+    if (!specialtyFound) return null;
 
-    return postFound;
+    return specialtyFound;
   }
 
-  async create(post: Specialty): Promise<Specialty> {
-    const newPost = Specialty.build(post);
-    return await this.postsRepository.create(newPost);
+  async create(specialty: Specialty): Promise<Specialty> {
+    const newSpecialty = Specialty.build(specialty);
+    const specialtyCreated = await this.specialtiesRepository.create(newSpecialty);
+
+    await new SpecialtyCreatedPublisher(natsWrapper.client).publish({
+      id: specialtyCreated.id!,
+      name: specialtyCreated.name,
+      sphereId: specialtyCreated.sphereId,
+    });
+
+    return specialtyCreated;
   }
 
-  async update(id: string, post: Partial<Specialty>): Promise<Specialty | null> {
-    const postUpdated = await this.postsRepository.update(id, post);
-    if (!postUpdated) return null;
+  async update(id: string, specialty: Partial<Specialty>): Promise<Specialty | null> {
+    const specialtyUpdated = await this.specialtiesRepository.update(id, specialty);
+    if (!specialtyUpdated) return null;
 
-    return Specialty.build(postUpdated);
+    return Specialty.build(specialtyUpdated);
   }
 
   async delete(id: string): Promise<Specialty | null> {
-    const postDeleted = await this.postsRepository.delete(id);
-    if (!postDeleted) return null;
+    const specialtyDeleted = await this.specialtiesRepository.delete(id);
+    if (!specialtyDeleted) return null;
 
-    return postDeleted;
+    return specialtyDeleted;
   }
 }

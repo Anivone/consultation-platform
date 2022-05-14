@@ -1,40 +1,51 @@
 import mongoose, { Document, Model } from "mongoose";
-import {SpecialtyProps} from "../../domain/entities/types";
-import {updateIfCurrentPlugin} from "mongoose-update-if-current";
+import { SphereProps } from "../../domain/entities/types";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { setProps } from "@mv-consultation-platform/common";
+import { Sphere } from "../../domain/entities/Sphere";
 
-export interface SpecialtyDoc extends Omit<SpecialtyProps, 'id'>, Document {}
+export interface SphereDoc extends Omit<SphereProps, "id">, Document {}
 
-export interface SpecialtyMod extends Model<SpecialtyDoc> {
-    build(props: SpecialtyProps): SpecialtyDoc;
+export interface SphereMod extends Model<SphereDoc> {
+  build(props: SphereProps): SphereDoc;
+  setProps(doc: SphereDoc, props: Partial<SphereProps>): SphereDoc;
 }
 
-const SpecialtySchema = new mongoose.Schema({
+const SphereSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
-    sphereId: {
-        type: String,
-        required: true,
-    }
-}, {
+    tags: {
+      type: [String],
+      required: true,
+    },
+  },
+  {
     toJSON: {
-        transform: (doc, ret) => {
-            ret.id = ret._id;
-            delete ret._id;
-            delete ret.__v;
-        }
-    }
-});
+      transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
-SpecialtySchema.set('versionKey', 'version');
-SpecialtySchema.plugin(updateIfCurrentPlugin);
+SphereSchema.set("versionKey", "version");
+SphereSchema.plugin(updateIfCurrentPlugin);
 
-SpecialtySchema.statics.build = (props: SpecialtyProps) => {
-    return new SpecialtyModel(props);
-}
+SphereSchema.statics.setProps = setProps;
 
-const SpecialtyModel = mongoose.model<SpecialtyDoc, SpecialtyMod>('Specialty', SpecialtySchema);
+SphereSchema.statics.build = (props: SphereProps) => {
+  return new SphereModel(props);
+};
 
-export default SpecialtyModel;
+const SphereModel = mongoose.model<SphereDoc, SphereMod>(
+  "Sphere",
+  SphereSchema
+);
+
+export default SphereModel;

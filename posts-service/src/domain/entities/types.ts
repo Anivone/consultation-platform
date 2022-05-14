@@ -6,6 +6,7 @@ export enum PostStatus {
 
 export interface PostProps {
     id?: string;
+    version: number;
     title: string;
     description: string;
     userId: string;
@@ -16,4 +17,10 @@ export interface PostProps {
     specialty: string;
     status?: PostStatus;
     edited?: boolean;
+}
+
+export interface SpecialtyProps {
+    id?: string;
+    name: string;
+    sphereId: string;
 }

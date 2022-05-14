@@ -1,5 +1,6 @@
 import mongoose, { Document, Model } from "mongoose";
 import {PostProps, PostStatus} from "../../domain/entities/types";
+import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 export interface PostDoc extends Omit<PostProps, 'id'>, Document {}
 
@@ -57,6 +58,9 @@ const PostSchema = new mongoose.Schema({
         }
     }
 });
+
+PostSchema.set('versionKey', 'version');
+PostSchema.plugin(updateIfCurrentPlugin);
 
 PostSchema.statics.build = (props: PostProps) => {
     return new PostModel(props);

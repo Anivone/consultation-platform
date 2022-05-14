@@ -1,23 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: posts-depl
+  name: specialties-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: posts
+      app: specialties
   template:
     metadata:
       labels:
-        app: posts
+        app: specialties
     spec:
       containers:
-        - name: posts
-          image: anivone/posts-service
+        - name: specialties
+          image: anivone/specialties-service
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: consultation-platform
             - name: MONGO_URI
-              value: "mongodb://posts-mongo-srv:27017/posts-service"
+              value: "mongodb://specialties-mongo-srv:27017/specialties-service"
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -27,13 +35,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: posts-srv
+  name: specialties-srv
 spec:
   selector:
-    app: posts
+    app: specialties
   type: ClusterIP
   ports:
-    - name: posts
+    - name: specialties
       protocol: TCP
       port: 3000
       targetPort: 3000

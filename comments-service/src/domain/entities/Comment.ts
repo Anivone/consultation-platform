@@ -5,6 +5,9 @@ export class Comment implements CommentProps {
   // TODO: fix the validation error on 'required' fields
   id?: string;
 
+  @ValidateIf(() => false)
+  version: number;
+
   @IsNotEmpty({
     message: "Text must be provided",
   })
@@ -27,7 +30,9 @@ export class Comment implements CommentProps {
 
   status?: CommentStatus;
 
+
   constructor(
+    version: number,
     text: string,
     userId: string,
     postId: string,
@@ -36,6 +41,7 @@ export class Comment implements CommentProps {
     status: CommentStatus = CommentStatus.DRAFT,
   ) {
     this.id = id;
+    this.version = version
     this.text = text;
     this.userId = userId;
     this.postId = postId;
@@ -43,7 +49,7 @@ export class Comment implements CommentProps {
     this.status = status;
   }
 
-  static build({ id, text, userId, postId, points, status }: CommentProps) {
-    return new Comment(text, userId, postId, id, points, status);
+  static build({ id, version, text, userId, postId, points, status }: CommentProps) {
+    return new Comment(version, text, userId, postId, id, points, status);
   }
 }

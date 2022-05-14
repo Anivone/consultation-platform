@@ -8,72 +8,72 @@ import {
   Post,
   Req,
 } from "routing-controllers";
-import { Specialty } from "../../domain/entities/Specialty";
+import { Sphere } from "../../domain/entities/Sphere";
 import { MyRequest } from "../../config/AwilixContainer";
 
-@JsonController("/specialtys")
-export class SpecialtiesController {
+@JsonController("/spheres")
+export class SpheresController {
   @Get()
-  async getSpecialties(@Req() req: MyRequest) {
-    const { specialtiesService } = req.container.cradle;
-    const specialties = await specialtiesService.get();
+  async getSpheres(@Req() req: MyRequest) {
+    const { spheresService } = req.container.cradle;
+    const spheres = await spheresService.get();
 
     return {
-      specialties,
+      spheres,
     };
   }
 
   @Get("/:id")
-  async getSpecialty(@Param("id") id: string, @Req() req: MyRequest) {
-    const { specialtiesService } = req.container.cradle;
+  async getSphere(@Param("id") id: string, @Req() req: MyRequest) {
+    const { spheresService } = req.container.cradle;
     console.log("id", id);
-    const specialtyFound = await specialtiesService.getById(id);
-    console.log("specialtyFound: ", specialtyFound);
+    const sphereFound = await spheresService.getById(id);
+    console.log("sphereFound: ", sphereFound);
 
     return {
-      specialty: specialtyFound,
+      sphere: sphereFound,
     };
   }
 
   @Post()
-  async createSpecialty(
+  async createSphere(
     @Req()
     req: MyRequest,
     @Body()
-    body: Specialty
+    body: Sphere
   ) {
-    const { specialtiesService } = req.container.cradle;
-    const newSpecialty = await specialtiesService.create(body);
+    const { spheresService } = req.container.cradle;
+    const newSphere = await spheresService.create(body);
 
     return {
-      specialty: newSpecialty,
+      sphere: newSphere,
     };
   }
 
   @Patch("/:id")
-  async updateSpecialty(
+  async updateSphere(
     @Param("id")
     id: string,
     @Req()
     req: MyRequest,
     @Body()
-    body: Partial<Specialty>
+    body: Partial<Sphere>
   ) {
-    const { specialtiesService } = req.container.cradle;
-    const specialtyUpdated = await specialtiesService.update(id, body);
+    const { spheresService } = req.container.cradle;
+    const sphereUpdated = await spheresService.update(id, body);
 
     return {
-      specialty: specialtyUpdated,
+      sphere: sphereUpdated,
     };
   }
 
   @Delete("/:id")
-  async deleteSpecialty(@Param("id") id: string, @Req() req: MyRequest) {
-    const { specialtiesService } = req.container.cradle;
-    const specialtyDeleted = await specialtiesService.delete(id);
+  async deleteSphere(@Param("id") id: string, @Req() req: MyRequest) {
+    const { spheresService } = req.container.cradle;
+    const sphereDeleted = await spheresService.delete(id);
 
     return {
-      specialty: specialtyDeleted,
+      sphere: sphereDeleted,
     };
   }
 }

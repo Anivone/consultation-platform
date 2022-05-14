@@ -1,56 +1,64 @@
 import { Repository } from "./Repository";
 import { Specialty } from "../../domain/entities/Specialty";
 import { SpecialtyProps } from "../../domain/entities/types";
-import { PostMod } from "../schemas/SpecialtySchema";
+import SpecialtyModel, { SpecialtyMod } from "../schemas/SpecialtySchema";
 
-interface PostsRepositoryProps {
-  PostModel: PostMod;
+interface SpecialtiesRepositoryProps {
+  SpecialtyModel: SpecialtyMod;
 }
 
-export class PostsRepository implements Repository<Specialty, SpecialtyProps> {
-  private PostModel: PostMod;
+export class SpecialtiesRepository
+  implements Repository<Specialty, SpecialtyProps>
+{
+  private SpecialtyModel: SpecialtyMod;
 
-  constructor({ PostModel }: PostsRepositoryProps) {
-    this.PostModel = PostModel;
+  constructor({ SpecialtyModel }: SpecialtiesRepositoryProps) {
+    this.SpecialtyModel = SpecialtyModel;
   }
 
   async create(props: SpecialtyProps): Promise<Specialty> {
-    const post = this.PostModel.build(props);
-    await post.save();
+    const specialty = this.SpecialtyModel.build(props);
+    await specialty.save();
 
-    return Specialty.build(post);
+    return Specialty.build(specialty);
   }
 
   async getAll(filter?: Partial<SpecialtyProps>): Promise<Specialty[]> {
-    const posts = await this.PostModel.find({ ...filter });
-    return posts.map((post) => Specialty.build(post));
+    const specialties = await this.SpecialtyModel.find({ ...filter });
+    return specialties.map((specialty) => Specialty.build(specialty));
   }
 
   async getById(id: string): Promise<Specialty | null> {
-    const postFound = await this.PostModel.findById(id);
-    if (!postFound) return null;
+    const specialtyFound = await this.SpecialtyModel.findById(id);
+    if (!specialtyFound) return null;
 
-    return Specialty.build(postFound);
+    return Specialty.build(specialtyFound);
   }
 
   async getOne(filter: Partial<SpecialtyProps>): Promise<Specialty | null> {
-    const postFound = await this.PostModel.findOne(filter);
-    if (!postFound) return null;
+    const specialtyFound = await this.SpecialtyModel.findOne(filter);
+    if (!specialtyFound) return null;
 
-    return Specialty.build(postFound);
+    return Specialty.build(specialtyFound);
   }
 
   async delete(id: string): Promise<Specialty | null> {
-    const postDeleted = await this.PostModel.findByIdAndDelete(id);
-    if (!postDeleted) return null;
+    const specialtyDeleted = await this.SpecialtyModel.findByIdAndDelete(id);
+    if (!specialtyDeleted) return null;
 
-    return Specialty.build(postDeleted);
+    return Specialty.build(specialtyDeleted);
   }
 
-  async update(id: string, props: Partial<SpecialtyProps>): Promise<Specialty | null> {
-    const postUpdated = await this.PostModel.findByIdAndUpdate(id, props);
-    if (!postUpdated) return null;
+  async update(
+    id: string,
+    props: Partial<SpecialtyProps>
+  ): Promise<Specialty | null> {
+    const specialtyUpdated = await this.SpecialtyModel.findById(id);
+    if (!specialtyUpdated) return null;
 
-    return Specialty.build(postUpdated);
+    SpecialtyModel.setProps(specialtyUpdated, props);
+    await specialtyUpdated.save();
+
+    return Specialty.build(specialtyUpdated);
   }
 }

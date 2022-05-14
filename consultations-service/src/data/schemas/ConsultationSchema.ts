@@ -1,4 +1,6 @@
 import mongoose, { Document, Model } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+
 import { ConsultationProps } from "../../domain/entities/types";
 import { Consultation } from "../../domain/entities/Consultation";
 
@@ -55,6 +57,9 @@ const ConsultationSchema = new mongoose.Schema(
     },
   }
 );
+
+ConsultationSchema.set("versionKey", "version");
+ConsultationSchema.plugin(updateIfCurrentPlugin);
 
 ConsultationSchema.statics.build = (props: ConsultationProps) => {
   return new ConsultationModel(props);

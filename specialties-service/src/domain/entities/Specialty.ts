@@ -1,99 +1,19 @@
-import { IsDate, IsNotEmpty, ValidateIf } from "class-validator";
-import { PostProps, PostStatus } from "./types";
+import { SpecialtyProps } from "./types";
 
-export class Post implements PostProps {
+export class Specialty implements SpecialtyProps {
   id?: string;
-
-  @IsNotEmpty({
-    message: "Title must be provided",
-  })
-  title: string;
-
-  @IsNotEmpty({
-    message: "Description must be provided",
-  })
-  description: string;
-
-  @IsNotEmpty({
-    message: "UserId must be provided",
-  })
-  userId: string;
-
-  relevancePoints?: number;
-
-  @ValidateIf((object) => object.date)
-  @IsDate({
-    message: "Invalid date",
-  })
-  date: Date;
-
-  views?: number;
-
-  @IsNotEmpty({
-    message: "SphereId must be provided",
-  })
+  version: number;
+  name: string;
   sphereId: string;
 
-  @IsNotEmpty({
-    message: "Specialty must be provided",
-  })
-  specialty: string;
-
-  status?: PostStatus;
-
-  edited?: boolean;
-
-  constructor(
-    title: string,
-    description: string,
-    userId: string,
-    sphereId: string,
-    specialty: string,
-    id?: string,
-    relevancePoints: number = 0,
-    date: Date = new Date(),
-    status: PostStatus = PostStatus.DRAFT,
-    views: number = 0,
-    edited: boolean = false
-  ) {
-    this.title = title;
-    this.description = description;
-    this.userId = userId;
-    this.relevancePoints = relevancePoints;
-    this.date = date;
-    this.views = views;
-    this.sphereId = sphereId;
-    this.specialty = specialty;
-    this.status = status;
-    this.edited = edited;
+  constructor(version: number, name: string, sphereId: string, id?: string) {
     this.id = id;
+    this.version = version;
+    this.name = name;
+    this.sphereId = sphereId
   }
 
-  static build({
-    id,
-    title,
-    description,
-    userId,
-    relevancePoints,
-    date,
-    views,
-    sphereId,
-    specialty,
-    status,
-    edited,
-  }: PostProps) {
-    return new Post(
-      title,
-      description,
-      userId,
-      sphereId,
-      specialty,
-      id,
-      relevancePoints,
-      date,
-      status,
-      views,
-      edited
-    );
+  static build({ id, version, name, sphereId }: SpecialtyProps) {
+    return new Specialty(version, name, sphereId, id);
   }
 }

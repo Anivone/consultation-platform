@@ -38,3 +38,17 @@ spec:
                 name: consultations-srv
                 port:
                   number: 3000
+          - path: /api/specialties/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: specialties-srv
+                port:
+                  number: 3000
+          - path: /api/spheres/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: specialties-srv
+                port:
+                  number: 3000

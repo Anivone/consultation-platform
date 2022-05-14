@@ -8,72 +8,72 @@ import {
   Post,
   Req,
 } from "routing-controllers";
-import { Specialty as MyPost } from "../../domain/entities/Specialty";
+import { Specialty } from "../../domain/entities/Specialty";
 import { MyRequest } from "../../config/AwilixContainer";
 
-@JsonController("/posts")
-export class PostsController {
+@JsonController("/specialties")
+export class SpecialtiesController {
   @Get()
-  async getPosts(@Req() req: MyRequest) {
-    const { postsService } = req.container.cradle;
-    const posts = await postsService.get();
+  async getSpecialties(@Req() req: MyRequest) {
+    const { specialtiesService } = req.container.cradle;
+    const specialties = await specialtiesService.get();
 
     return {
-      posts,
+      specialties,
     };
   }
 
   @Get("/:id")
-  async getPost(@Param("id") id: string, @Req() req: MyRequest) {
-    const { postsService } = req.container.cradle;
+  async getSpecialty(@Param("id") id: string, @Req() req: MyRequest) {
+    const { specialtiesService } = req.container.cradle;
     console.log("id", id);
-    const postFound = await postsService.getById(id);
-    console.log("postFound: ", postFound);
+    const specialtyFound = await specialtiesService.getById(id);
+    console.log("specialtyFound: ", specialtyFound);
 
     return {
-      post: postFound,
+      specialty: specialtyFound,
     };
   }
 
   @Post()
-  async createPost(
+  async createSpecialty(
     @Req()
     req: MyRequest,
     @Body()
-    body: MyPost
+    body: Specialty
   ) {
-    const { postsService } = req.container.cradle;
-    const newPost = await postsService.create(body);
+    const { specialtiesService } = req.container.cradle;
+    const newSpecialty = await specialtiesService.create(body);
 
     return {
-      post: newPost,
+      specialty: newSpecialty,
     };
   }
 
   @Patch("/:id")
-  async updatePost(
+  async updateSpecialty(
     @Param("id")
     id: string,
     @Req()
     req: MyRequest,
     @Body()
-    body: Partial<MyPost>
+    body: Partial<Specialty>
   ) {
-    const { postsService } = req.container.cradle;
-    const postUpdated = await postsService.update(id, body);
+    const { specialtiesService } = req.container.cradle;
+    const specialtyUpdated = await specialtiesService.update(id, body);
 
     return {
-      post: postUpdated,
+      specialty: specialtyUpdated,
     };
   }
 
   @Delete("/:id")
-  async deletePost(@Param("id") id: string, @Req() req: MyRequest) {
-    const { postsService } = req.container.cradle;
-    const postDeleted = await postsService.delete(id);
+  async deleteSpecialty(@Param("id") id: string, @Req() req: MyRequest) {
+    const { specialtiesService } = req.container.cradle;
+    const specialtyDeleted = await specialtiesService.delete(id);
 
     return {
-      post: postDeleted,
+      specialty: specialtyDeleted,
     };
   }
 }

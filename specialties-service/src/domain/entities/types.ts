@@ -1,19 +1,13 @@
-export enum PostStatus {
-    ACTIVE = "active",
-    DRAFT = "draft",
-    CLOSED = "closed",
+export interface SpecialtyProps {
+    id?: string;
+    version: number;
+    name: string;
+    sphereId: string;
 }
 
-export interface PostProps {
+export interface SphereProps {
     id?: string;
-    title: string;
-    description: string;
-    userId: string;
-    relevancePoints?: number;
-    date: Date;
-    views?: number;
-    sphereId: string;
-    specialty: string;
-    status?: PostStatus;
-    edited?: boolean;
+    version: number;
+    name: string;
+    tags: string[];
 }

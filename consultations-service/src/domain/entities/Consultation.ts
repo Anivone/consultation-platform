@@ -2,6 +2,7 @@ import { ConsultationProps } from "./types";
 
 export class Consultation implements ConsultationProps {
   id?: string;
+  version: number;
   title: string;
   userId: string;
   consultantId: string;
@@ -12,6 +13,7 @@ export class Consultation implements ConsultationProps {
   price: number;
 
   constructor(
+    version: number,
     title: string,
     userId: string,
     consultantId: string,
@@ -23,6 +25,7 @@ export class Consultation implements ConsultationProps {
     companyName?: string
   ) {
     this.id = id;
+    this.version = version;
     this.title = title;
     this.userId = userId;
     this.consultantId = consultantId;
@@ -35,6 +38,7 @@ export class Consultation implements ConsultationProps {
 
   static build({
     id,
+    version,
     title,
     userId,
     consultantId,
@@ -45,6 +49,7 @@ export class Consultation implements ConsultationProps {
     price,
   }: ConsultationProps) {
     return new Consultation(
+      version,
       title,
       userId,
       consultantId,

@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: posts-mongo-depl
+  name: specialties-mongo-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: posts-mongo
+      app: specialties-mongo
   template:
     metadata:
       labels:
-        app: posts-mongo
+        app: specialties-mongo
     spec:
       containers:
-        - name: posts-mongo
+        - name: specialties-mongo
           image: mongo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: posts-mongo-srv
+  name: specialties-mongo-srv
 spec:
   selector:
-    app: posts-mongo
+    app: specialties-mongo
   ports:
     - name: db
       protocol: TCP
