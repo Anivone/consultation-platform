@@ -52,3 +52,10 @@ spec:
                 name: specialties-srv
                 port:
                   number: 3000
+          - path: /api/recommendations/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: recommendations-srv
+                port:
+                  number: 3000

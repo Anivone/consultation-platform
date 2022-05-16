@@ -1,13 +1,15 @@
+import { UserDTO } from "../dtos/UserDTO";
+
 export interface Service<Entity, Interface> {
-    get(filter?: Partial<Interface>): Promise<Entity[]>;
+  get(filter?: Partial<Interface>): Promise<Entity[]>;
 
-    getById(id: string): Promise<Entity | null>;
+  getById(id: string, currentUser: UserDTO | null): Promise<Entity | null>;
 
-    getOne(filter: Partial<Interface>): Promise<Entity | null>;
+  getOne(filter: Partial<Interface>): Promise<Entity | null>;
 
-    create(props: Interface): Promise<Entity>;
+  create(props: Interface): Promise<Entity>;
 
-    update(id: string, props: Partial<Interface>): Promise<Entity | null>;
+  update(id: string, props: Partial<Interface>): Promise<Entity | null>;
 
-    delete(id: string): Promise<Entity | null>;
+  delete(id: string): Promise<Entity | null>;
 }

@@ -6,6 +6,8 @@ import { CustomBadRequestError } from "../errors/CustomBadRequestError";
 import { User } from "../../domain/entities/User";
 import { Password } from "../utils/Password";
 import { UserDTO } from "../dtos/UserDTO";
+import { UserCreatedPublisher } from "../../events/UserCreated.publisher";
+import { natsWrapper } from "@mv-consultation-platform/common";
 
 interface AuthSrvProps {
   authRepository: AuthRepository;
@@ -47,6 +49,11 @@ export class AuthService {
 
     const newUser = await this.authRepository.create(user);
     const jwtToken = this.generateJwtToken(newUser);
+
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      ...newUser,
+      id: newUser.id!,
+    });
 
     return [newUser, jwtToken];
   }

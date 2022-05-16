@@ -1,8 +1,8 @@
-import { CommentProps, CommentStatus } from "./types";
+import { CommentProps } from "./types";
 import { IsNotEmpty, IsNumber, ValidateIf } from "class-validator";
+import {CommentStatus} from "@mv-consultation-platform/common";
 
 export class Comment implements CommentProps {
-  // TODO: fix the validation error on 'required' fields
   id?: string;
 
   @ValidateIf(() => false)
@@ -29,7 +29,6 @@ export class Comment implements CommentProps {
   points?: number;
 
   status?: CommentStatus;
-
 
   constructor(
     version: number,

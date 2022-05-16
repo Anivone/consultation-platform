@@ -6,10 +6,11 @@ import {
   Param,
   Patch,
   Post,
-  Req,
+  Req, UseBefore,
 } from "routing-controllers";
 import { Post as MyPost } from "../../domain/entities/Post";
 import { MyRequest } from "../../config/AwilixContainer";
+import {currentUser} from "../middlewares/CurrentUser";
 
 @JsonController("/posts")
 export class PostsController {
@@ -23,12 +24,11 @@ export class PostsController {
     };
   }
 
+  @UseBefore(currentUser)
   @Get("/:id")
   async getPost(@Param("id") id: string, @Req() req: MyRequest) {
     const { postsService } = req.container.cradle;
-    console.log("id", id);
-    const postFound = await postsService.getById(id);
-    console.log("postFound: ", postFound);
+    const postFound = await postsService.getById(id, req.currentUser);
 
     return {
       post: postFound,

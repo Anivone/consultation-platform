@@ -1,0 +1,29 @@
+{
+  "name": "consultation-platform",
+  "version": "1.0.0",
+  "description": "Application about answering users' questions and giving private consultations.",
+  "main": "index.js",
+  "scripts": {
+    "update-common": "npm run update-posts && npm run update-specialties && npm run update-comments && npm run update-recommendations && npm run update-auth",
+    "update-posts": "cd posts-service && npm i @mv-consultation-platform/common",
+    "update-specialties": "cd specialties-service && npm i @mv-consultation-platform/common",
+    "update-comments": "cd comments-service && npm i @mv-consultation-platform/common",
+    "update-recommendations": "cd recommendations-service && npm i @mv-consultation-platform/common",
+    "update-auth": "cd auth-service && npm i @mv-consultation-platform/common"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anivone/consultation-platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anivone/consultation-platform/issues"
+  },
+  "homepage": "https://github.com/Anivone/consultation-platform#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}

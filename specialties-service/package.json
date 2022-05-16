@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mv-consultation-platform/common": "^1.0.3",
+    "@mv-consultation-platform/common": "^1.0.21",
     "@types/axios": "^0.14.0",
     "@types/body-parser": "^1.19.2",
     "@types/cookie-parser": "^1.4.2",

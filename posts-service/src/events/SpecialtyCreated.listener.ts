@@ -9,7 +9,7 @@ import SpecialtyModel from "../data/schemas/SpecialtySchema";
 
 export class SpecialtyCreatedListener extends Listener<SpecialtyCreatedEvent> {
   queueGroupName: string = queueGroupName;
-  subject: SpecialtyCreatedEvent["subject"] = Subjects.SpecialtyCreated;
+  subject: Subjects.SpecialtyCreated = Subjects.SpecialtyCreated;
 
   async onMessage(data: SpecialtyCreatedEvent["data"], msg: Message) {
     const { id, name, sphereId } = data;

@@ -1,7 +1,8 @@
-import { ExpressApplication } from "./ExpressApplication";
 import mongoose from "mongoose";
+import { SphereCreatedListener } from "../events/SphereCreated.listener";
+import { ExpressApplication } from "./ExpressApplication";
 import { natsWrapper } from "@mv-consultation-platform/common";
-import {SpecialtyCreatedListener} from "../events/SpecialtyCreatedListener";
+import { SpecialtyCreatedListener } from "../events/SpecialtyCreated.listener";
 
 export class StartUp {
   server: ExpressApplication;
@@ -41,6 +42,7 @@ export class StartUp {
       process.on("SIGTERM", () => natsWrapper.client.close());
 
       new SpecialtyCreatedListener(natsWrapper.client).listen();
+      new SphereCreatedListener(natsWrapper.client).listen();
 
       await mongoose.connect(process.env.MONGO_URI);
       console.log("Successfully connected to MongoDB");

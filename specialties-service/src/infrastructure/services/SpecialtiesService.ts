@@ -1,15 +1,15 @@
 import { SpecialtiesRepository } from "../../data/repositories/SpecialtiesRepository";
 import { Specialty } from "../../domain/entities/Specialty";
-import {SpecialtyProps} from "../../domain/entities/types";
-import {Service} from "./Service";
-import {SpecialtyCreatedPublisher} from "../../events/SpecialtyCreatedPublisher";
-import {natsWrapper} from "@mv-consultation-platform/common";
+import { SpecialtyProps } from "../../domain/entities/types";
+import { Service } from "./Service";
+import { SpecialtyCreatedPublisher } from "../../events/SpecialtyCreated.publisher";
+import { natsWrapper } from "@mv-consultation-platform/common";
 
 interface SpecialtiesServiceProps {
   specialtiesRepository: SpecialtiesRepository;
 }
 
-export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
+export class SpecialtiesService implements Service<Specialty, SpecialtyProps> {
   private specialtiesRepository: SpecialtiesRepository;
 
   constructor({ specialtiesRepository }: SpecialtiesServiceProps) {
@@ -24,7 +24,7 @@ export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
 
   async getById(id: string): Promise<Specialty | null> {
     const specialtyFound = await this.specialtiesRepository.getById(id);
-    console.log('specialtyFound', specialtyFound);
+    console.log("specialtyFound", specialtyFound);
     if (!specialtyFound) return null;
 
     return specialtyFound;
@@ -39,7 +39,9 @@ export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
 
   async create(specialty: Specialty): Promise<Specialty> {
     const newSpecialty = Specialty.build(specialty);
-    const specialtyCreated = await this.specialtiesRepository.create(newSpecialty);
+    const specialtyCreated = await this.specialtiesRepository.create(
+      newSpecialty
+    );
 
     await new SpecialtyCreatedPublisher(natsWrapper.client).publish({
       id: specialtyCreated.id!,
@@ -50,8 +52,14 @@ export class SpecialtiesService implements Service<Specialty, SpecialtyProps>{
     return specialtyCreated;
   }
 
-  async update(id: string, specialty: Partial<Specialty>): Promise<Specialty | null> {
-    const specialtyUpdated = await this.specialtiesRepository.update(id, specialty);
+  async update(
+    id: string,
+    specialty: Partial<Specialty>
+  ): Promise<Specialty | null> {
+    const specialtyUpdated = await this.specialtiesRepository.update(
+      id,
+      specialty
+    );
     if (!specialtyUpdated) return null;
 
     return Specialty.build(specialtyUpdated);

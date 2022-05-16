@@ -1,13 +1,15 @@
+import { natsWrapper } from "@mv-consultation-platform/common";
+import { SphereCreatedPublisher } from "./../../events/SphereCreated.publisher";
 import { SpheresRepository } from "../../data/repositories/SpheresRepository";
 import { Sphere } from "../../domain/entities/Sphere";
-import {SphereProps} from "../../domain/entities/types";
-import {Service} from "./Service";
+import { SphereProps } from "../../domain/entities/types";
+import { Service } from "./Service";
 
 interface SpheresServiceProps {
   spheresRepository: SpheresRepository;
 }
 
-export class SpheresService implements Service<Sphere, SphereProps>{
+export class SpheresService implements Service<Sphere, SphereProps> {
   private spheresRepository: SpheresRepository;
 
   constructor({ spheresRepository }: SpheresServiceProps) {
@@ -22,7 +24,7 @@ export class SpheresService implements Service<Sphere, SphereProps>{
 
   async getById(id: string): Promise<Sphere | null> {
     const sphereFound = await this.spheresRepository.getById(id);
-    console.log('sphereFound', sphereFound);
+    console.log("sphereFound", sphereFound);
     if (!sphereFound) return null;
 
     return sphereFound;
@@ -36,8 +38,16 @@ export class SpheresService implements Service<Sphere, SphereProps>{
   }
 
   async create(sphere: Sphere): Promise<Sphere> {
-    const newPost = Sphere.build(sphere);
-    return await this.spheresRepository.create(newPost);
+    const newSphere = Sphere.build(sphere);
+    const sphereCreated = await this.spheresRepository.create(newSphere);
+
+    await new SphereCreatedPublisher(natsWrapper.client).publish({
+      id: sphereCreated.id!,
+      name: sphereCreated.name,
+      tags: sphereCreated.tags,
+    });
+
+    return sphereCreated;
   }
 
   async update(id: string, sphere: Partial<Sphere>): Promise<Sphere | null> {
